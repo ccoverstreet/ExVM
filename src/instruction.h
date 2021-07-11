@@ -12,6 +12,11 @@ namespace ExVM {
 	bool inst_push(VM &vm, unsigned int operand);
 	bool inst_pop(VM &vm, unsigned int operand);
 	bool inst_call(VM &vm, unsigned int operand);
+	bool inst_jr(VM &vm, unsigned int operand);
+	bool inst_ja(VM &vm, unsigned int operand);
+	bool inst_jnz(VM &vm, unsigned int operand); // Jump not zero
+	bool inst_jlt(VM &vm, unsigned int operand); // Jump less than
+	bool inst_add(VM &vm, unsigned int operand); // 
 
 	const Instruction itable[EXVM_ITABLE_SIZE] = {
 		inst_noop, // 0x00
@@ -20,7 +25,10 @@ namespace ExVM {
 		inst_push, // 0x03
 		inst_pop, // 0x04
 		inst_call, // 0x05
-		inst_noop, // 0x06
-		inst_noop  // 0x07
+		inst_jr, // 0x06
+		inst_ja,  // 0x07
+		inst_jnz, // 0x08
+		inst_jlt, // 0x09
+		inst_add, // 0x0a
 	};
 }

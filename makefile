@@ -1,5 +1,10 @@
+cpp = g++
+
 driver: src/*.cpp src/*.h
-	g++ src/*.cpp -o driver
+	$(cpp) src/*.cpp -o driver
 
 run: driver
 	./driver
+
+mem: driver
+	valgrind ./driver -s
