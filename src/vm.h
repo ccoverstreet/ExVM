@@ -1,58 +1,42 @@
 #pragma once
 
-#include <array>
-#include <stdio.h>
-#include <stdbool.h>
+#include <iostream>
+#include <stack>
+#include <cstdint>
+#include <vector>
 
-#define EXVM_ITABLE_SIZE 16
-#define EXVM_N_REGISTERS 8
-#define EXVM_N_PROCEDURES 16
+class Stack {
+	private:
+		size_t m_maxSize;
+		std::stack<uint32_t> m_stack;
 
-namespace ExVM {
-	enum Error {
-		NONE,
-		ERR
-	};
+	public:
+		Stack();
+		Stack(size_t size);
 
-	class VM {
-		public:
-			VM(unsigned int, unsigned int);
-			~VM();
+		void push(uint32_t val);
+		uint32_t pop();
+};
 
-			void PrintState();
-			void PrintProgram();
-			void PrintStack();
-			void PrintRegisters();
+struct Instruction {
+	uint8_t code;
+	uint32_t operand;
+};
 
-			Error LoadProgram(unsigned int *data, size_t size);
-			
-			Error GetProgramValue(unsigned int index, unsigned int &val);
+class Machine {
+	private:
+		Stack m_stack;
+		size_t m_pc = 0;
+		std::vector<Instruction> m_program;
+	public:
+		Machine(size_t stack_size);
 
-			unsigned int GetProgramCounter();
-			void SetProgramCounter(unsigned int val);
+		void loadProgram(std::vector<Instruction> prog);
+		void step();
+		void push(uint32_t val);
+		uint32_t pop();
+};
 
-			Error GetRegisterValue(unsigned char reg, unsigned int &val);
-			Error SetRegisterValue(unsigned char dest, unsigned int value);
-
-			Error Push(unsigned int val);
-			Error Pop(unsigned int &val);
-
-			Error RegisterProcedure(unsigned char id, bool (*proc)(VM &vm, unsigned int));
-			bool CallProcedure(unsigned char id, unsigned int operand);
-
-			Error Execute();
-
-			bool flagStop = false;
-
-		private:
-			unsigned int m_r[EXVM_N_REGISTERS]; // Registers	
-			bool (*m_procedures[EXVM_N_PROCEDURES])(VM &vm, unsigned int operand);
-			unsigned int *m_program; // Pointer to block of memory for program
-			unsigned int m_programSize;
-			unsigned int *m_stack; // Pointer to block of memory for stack
-			unsigned int m_stackSize;
-
-			unsigned int m_pc = 0; // Program counter
-			int m_sp = -1; // Stack pointer
-	};
-}
+void addInt(Machine &vm);
+void subInt(Machine &vm);
+void jump(Machine &vm);

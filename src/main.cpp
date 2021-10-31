@@ -1,44 +1,45 @@
+#include <iostream>
+#include <stack>
+#include <cstdint>
+#include <vector>
+
 #include "./vm.h"
-#include <unistd.h>
 
-unsigned int test_program[16] = {
-	0x00000003,
-	0x00000003,
-	0x00000001,
-	0x01020001,
-	0x01030002,
-	0x05000100,
-	0x03000000,
-	0x03000000,
-	0x0a010300,
-	0x09fffa02
-};
 
-bool proc_sleep(ExVM::VM &vm, unsigned int operand) {
-	unsigned char sleep_time = operand >> (8 * 1);
 
-	sleep(sleep_time);
+void testMath(Machine &vm) {
+	// x = 1 + 2 + 1 - 3
 
-	return 0;
+	vm.push(1);
+	vm.push(2);
+	vm.push(1);
+	vm.push(1);
+	subInt(vm);
+	addInt(vm);
+	addInt(vm);
+	printf("%u\n", vm.pop());
 }
 
 
+
 int main() {
-	ExVM::VM vm(16, 8);
+	size_t PROGRAM_SIZE = 10;
+	std::vector<Instruction> prog = {
+		{0x01, 5},
+		{0x01, 0x00000001},
+		{0x01, 0x00000003},
+		{0x04, 0x0},
+		{0x03, 0x0}
+	};
 
-	ExVM::Error err = vm.LoadProgram(test_program, sizeof(test_program));
-	if (err != 0) {
-		return 1;
+	Machine vm(20);
+
+	for (size_t i = 0; i < PROGRAM_SIZE; i++) {
+		
 	}
 
-	err = vm.RegisterProcedure(0, proc_sleep);
-	if (err != 0) {
-		return 1;
-	}
-
-	while(vm.Execute() == 0) {}
-	vm.PrintStack();
-	vm.PrintRegisters();
+	printf("%u\n", vm.pop());
+	//testMath(vm);
 
 	return 0;
 }

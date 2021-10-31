@@ -1,6 +1,6 @@
 cpp = g++
 
-driver: src/*.cpp src/*.h
+driver: src/*.cpp
 	$(cpp) src/*.cpp -o driver
 
 run: driver
