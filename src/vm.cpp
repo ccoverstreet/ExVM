@@ -36,12 +36,12 @@ void Machine::loadProgram(std::vector<Instruction> prog) {
 }
 
 void Machine::step() {
-	switch (prog[i].code) {
+	switch (m_program[m_pc].code) {
 		case 0x01: // NO-OP
-			this.push(prog[i].operand);
+			this->push(m_program[m_pc].operand);
 			break;
 		case 0x02: // Pop
-			this.pop();
+			this->pop();
 			break;
 		case 0x03: // Add
 			addInt(*this);
