@@ -1,4 +1,4 @@
-#include "./stack.h"
+#include "../src/stack.h"
 
 #include <cstdio>
 #include <assert.h>

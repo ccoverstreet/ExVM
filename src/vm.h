@@ -1,22 +1,12 @@
 #pragma once
 
 #include <iostream>
-#include <stack>
 #include <cstdint>
 #include <vector>
+#include <functional>
 
-class Stack {
-	private:
-		size_t m_maxSize;
-		std::stack<uint32_t> m_stack;
+#include "./stack.h"
 
-	public:
-		Stack();
-		Stack(size_t size);
-
-		void push(uint32_t val);
-		uint32_t pop();
-};
 
 struct Instruction {
 	uint8_t code;
@@ -25,18 +15,34 @@ struct Instruction {
 
 class Machine {
 	private:
-		Stack m_stack;
+		FixedStack m_stack;
 		size_t m_pc = 0;
-		std::vector<Instruction> m_program;
+		//std::vector<Instruction> m_program;
+
 	public:
-		Machine(size_t stack_size);
+		Machine(size_t stackSize);
+		~Machine();
 
 		void loadProgram(std::vector<Instruction> prog);
-		void step();
-		void push(uint32_t val);
-		uint32_t pop();
+		void printStack();
+
+		//void step(std::function<void(Machine&)> &table) {
+		//};
+
+		int push(uint32_t val);
+		int pop(uint32_t &val);
 };
 
-void addInt(Machine &vm);
-void subInt(Machine &vm);
-void jump(Machine &vm);
+
+// INSTRUCTIONS
+typedef int (*InstFunc)(Machine&);
+
+int noop(Machine &vm){ return 0; }
+int addInt(Machine &vm);
+int subInt(Machine &vm);
+
+const InstFunc INST_TABLE[3] = {
+	noop,
+	addInt,
+	subInt
+};

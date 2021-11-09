@@ -3,8 +3,11 @@
 #include <cstdint>
 #include <vector>
 
-#include "./vm.h"
 
+// Necessary Defines
+#define EXVM_STACK_SIZE 8
+
+#include "./vm.h"
 
 
 void testMath(Machine &vm) {
@@ -14,10 +17,8 @@ void testMath(Machine &vm) {
 	vm.push(3);
 	vm.push(1);
 	vm.push(1);
-	subInt(vm);
-	addInt(vm);
-	addInt(vm);
-	printf("%u\n", vm.pop());
+
+	vm.printStack();
 }
 
 int main() {
@@ -31,14 +32,14 @@ int main() {
 		{0x03, 0x0}
 	};
 
-	Machine vm(20);
-
-	for (size_t i = 0; i < PROGRAM_SIZE; i++) {
-		
-	}
-
-	printf("%u\n", vm.pop());
-	//testMath(vm);
+	Machine vm(4);
+	vm.push(1);
+	vm.push(1);
+	vm.push(2);
+	addInt(vm);
+	vm.printStack();
+	subInt(vm);
+	vm.printStack();
 
 	return 0;
 }

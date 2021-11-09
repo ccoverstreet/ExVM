@@ -1,80 +1,38 @@
+
 #include "./vm.h"
 
-Stack::Stack() {
-
+Machine::Machine(size_t stackSize) {
+	m_stack = FixedStack(stackSize);
 }
 
-Stack::Stack(size_t size) {
-	m_maxSize = size;
+Machine::~Machine() {}
+
+void Machine::printStack() {
+	m_stack.printStack();
 }
 
-void Stack::push(uint32_t val) {
-	if (m_stack.size() >= m_maxSize) {
-		exit(100);
-	}
+int Machine::pop(uint32_t &val) {
+	return m_stack.pop(val);
+} 
 
-	m_stack.push(val);
-}
-
-uint32_t Stack::pop() {
-	if (m_stack.size() <= 0) {
-		exit(101);
-	}
-	auto val = m_stack.top();
-	m_stack.pop();
-	return val;
-}
+int Machine::push(uint32_t val) {
+	return m_stack.push(val);
+} 
 
 
-
-Machine::Machine(size_t stack_size) {
-	m_stack = Stack(stack_size);
-}
-
-void Machine::loadProgram(std::vector<Instruction> prog) {
-	m_program = prog;
-}
-
-void Machine::step() {
-	switch (m_program[m_pc].code) {
-		case 0x01: // NO-OP
-			this->push(m_program[m_pc].operand);
-			break;
-		case 0x02: // Pop
-			this->pop();
-			break;
-		case 0x03: // Add
-			addInt(*this);
-			break;
-		case 0x04: // Subtract
-			subInt(*this);
-			break;
-		case 0x05: // Jump
-			jump(*this);
-	}
-}
-
-void Machine::push(uint32_t val) {
-	m_stack.push(val);
-}
-
-uint32_t Machine::pop() {
-	return m_stack.pop();
-}
-
-
-void addInt(Machine &vm) {
-	auto a = vm.pop();
-	auto b = vm.pop();
+// INSTRUCTIONS
+int addInt(Machine &vm) {
+	uint32_t a, b;
+	if (vm.pop(a) || vm.pop(b)) return 1;
+	
 	vm.push(a + b);
+	return 0;
 }
 
-void subInt(Machine &vm) {
-	auto a = vm.pop();
-	auto b = vm.pop();
+int subInt(Machine &vm) {
+	uint32_t a, b;
+	if (vm.pop(a) || vm.pop(b)) return 1;
+	
 	vm.push(a - b);
-}
-
-void jump(Machine &vm) {
-
+	return 0;
 }
