@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-	unsigned short val;
+	unsigned int val;
 
 	printf("%d\n", argc);
 
@@ -9,8 +9,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	sscanf(argv[1], "%hd", &val);
-	printf("%x\n", val);
+	sscanf(argv[1], "%u", &val);
+	printf("%08x\n", val);
 
 	return 0;
 }
