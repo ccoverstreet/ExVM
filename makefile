@@ -1,23 +1,17 @@
-cpp = g++
+SOURCES = src/*.c 
+HEADERS = src/*.h
 
-
-SOURCES = src/*.cpp
-TESTS = tests/*
-
-driver: $(SOURCES) src/*.h
-	$(cpp) src/main.cpp src/vm.cpp -o driver
+driver: $(SOURCES) $(HEADERS)
+	gcc $(SOURCES) -o driver
 
 run: driver
 	./driver
 
-mem: driver
-	valgrind ./driver -s
+memcheck: driver
+	valgrind ./driver
 
-test_driver: $(TESTS) $(SOURCES)
-	g++ $(TESTS) -o test_driver
+tester: tests/tester.c src/stack.c src/vm.c
+	gcc tests/tester.c src/stack.c src/vm.c -o tester
 
-stack_test: src/stack.h tests/stacktest.cpp
-	g++ tests/stacktest.cpp -o stack_test
-
-test_stack: stack_test
-	./stack_test
+test: tester
+	valgrind ./tester

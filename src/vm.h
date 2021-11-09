@@ -1,48 +1,24 @@
+// Virtual Machine
+// Cale Overstreet
+// Nov. 8, 2021
+
 #pragma once
 
-#include <iostream>
-#include <cstdint>
-#include <vector>
-#include <functional>
-
 #include "./stack.h"
+#include "./instruction.h"
 
+typedef struct {
+	FixedStack *stack;
+	Instruction *program;
+	size_t pc; // Program Counter
+} ExVM;
 
-struct Instruction {
-	uint8_t code;
-	uint32_t operand;
-};
+ExVM *ExVM_create(size_t stack_size, size_t program_size);
+void ExVM_destroy(ExVM* vm);
 
-class Machine {
-	private:
-		FixedStack m_stack;
-		size_t m_pc = 0;
-		//std::vector<Instruction> m_program;
+void ExVM_print(ExVM *vm);
 
-	public:
-		Machine(size_t stackSize);
-		~Machine();
+int ExVM_push(ExVM* vm, uint32_t val);
+int ExVM_pop(ExVM* vm, uint32_t *dest);
 
-		void loadProgram(std::vector<Instruction> prog);
-		void printStack();
-
-		//void step(std::function<void(Machine&)> &table) {
-		//};
-
-		int push(uint32_t val);
-		int pop(uint32_t &val);
-};
-
-
-// INSTRUCTIONS
-typedef int (*InstFunc)(Machine&);
-
-int noop(Machine &vm){ return 0; }
-int addInt(Machine &vm);
-int subInt(Machine &vm);
-
-const InstFunc INST_TABLE[3] = {
-	noop,
-	addInt,
-	subInt
-};
+int ExVM_step(ExVM *vm);
