@@ -1,8 +1,8 @@
 SOURCES = src/*.c 
 HEADERS = src/*.h
 
-driver: $(SOURCES) $(HEADERS)
-	gcc $(SOURCES) -o driver
+driver: main.c $(SOURCES) $(HEADERS)
+	gcc main.c $(SOURCES) -o driver
 
 run: driver
 	./driver

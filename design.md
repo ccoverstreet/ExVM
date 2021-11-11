@@ -9,6 +9,11 @@
 - Every instruction is passed a pointer to the "Machine" structure and uses a corresponding function to modify the state
 	- ex. Push, Pop, Error (Error has not been implemented yet)
 
+## Stack/Register hybrid
+
+- Functions are executed using the `call` op
+	- Return address is pushed onto stack
+
 ## Machine Execution
 
 - The machine loads a program into its memory

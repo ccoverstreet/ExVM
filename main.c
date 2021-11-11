@@ -2,7 +2,7 @@
 // Cale Overstreet
 // Nov. 8, 2021
 
-#include "./stack.h"
+#include "./src/stack.h"
 
 int main() {
 	FixedStack *stack = FixedStack_create(4);
